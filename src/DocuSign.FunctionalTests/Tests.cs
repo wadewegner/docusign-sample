@@ -70,6 +70,26 @@ namespace DocuSign.FunctionalTests
             Assert.IsNotNull(envelope.uri);
         }
 
+        [Test]
+        public async void GetRecipientViewUrl()
+        {
+            var auth = new AuthenticationClient(username, password, integratorKey);
+            await auth.LoginInformation();
+
+            var client = new DocuSignClient(auth);
+            var envelope = await client.SendSignatureRequestAsync(templateId, recipientName, recipientEmail, templateRole);
+
+            var uri = envelope.uri;
+            var recipientView = await client.RecipientViewAsync(recipientName, recipientEmail, uri);
+
+            Assert.IsNotNull(recipientView);
+            Assert.IsNotNull(recipientView.url);
+
+            Uri uriResult;
+            bool isUri = Uri.TryCreate(recipientView.url, UriKind.Absolute, out uriResult);
+            Assert.IsTrue(isUri);
+        }
+
         private async Task<LoginAccount> Login()
         {
             var auth = new AuthenticationClient(username, password, integratorKey);

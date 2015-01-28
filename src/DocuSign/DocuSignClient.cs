@@ -47,6 +47,7 @@ namespace DocuSign
                                 "<name>" + recipientName + "</name>" +
                                 "<email>" + recipientEmail + "</email>" +
                                 "<roleName>" + templateRole + "</roleName>" +
+                                "<clientUserId>1</clientUserId>" +      // is this always needed? TODO: What do I do with this?
                             "</templateRole>" +
                         "</templateRoles>" +
                     "</envelopeDefinition>";
@@ -66,6 +67,40 @@ namespace DocuSign
             if (responseMessage.IsSuccessStatusCode)
             {
                 var envelope = JsonConvert.DeserializeObject<Envelope>(response);
+                return envelope;
+            }
+
+            // impelmenet exception
+            return null;
+        }
+
+        public async Task<RecipientView> RecipientViewAsync(string recipientName, string recipientEmail, string uri)
+        {
+            var url = _baseUrl + uri + "/views/recipient";
+
+            var requestBody = "<recipientViewRequest xmlns=\"http://www.docusign.com/restapi\">" +
+                        "<authenticationMethod>email</authenticationMethod>" +
+                        "<email>" + recipientEmail + "</email>" +
+                        "<returnUrl>http://www.docusign.com</returnUrl>" +
+                        "<clientUserId>1</clientUserId>" + 	    // must match clientUserId set in step 2! TODO: What do I do with this?
+                        "<userName>" + recipientName + "</userName>" +
+                        "</recipientViewRequest>";
+
+            var content = new StringContent(requestBody, Encoding.UTF8, "application/xml");
+
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(url),
+                Content = content
+            };
+
+            var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                var envelope = JsonConvert.DeserializeObject<RecipientView>(response);
                 return envelope;
             }
 
