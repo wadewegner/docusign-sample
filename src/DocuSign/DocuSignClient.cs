@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -14,7 +15,6 @@ namespace DocuSign
     public class DocuSignClient
     {
         private string _baseUrl;
-        private string _docuSignCredentials;
         private HttpClient _httpClient;
 
         public DocuSignClient(AuthenticationClient authenticationClient)
@@ -25,7 +25,6 @@ namespace DocuSign
         public DocuSignClient(AuthenticationClient authenticationClient, HttpClient httpClient)
         {
             _baseUrl = authenticationClient.BaseUrl;
-            _docuSignCredentials = authenticationClient.DocuSignCredentials;
             _httpClient = httpClient;
 
             _httpClient.DefaultRequestHeaders.Add("X-DocuSign-Authentication", authenticationClient.DocuSignCredentials);
@@ -52,7 +51,7 @@ namespace DocuSign
                 return envelope;
             }
 
-            // impelmenet exception
+            // implement exception
             return null;
         }
 
@@ -75,11 +74,74 @@ namespace DocuSign
                 return envelope;
             }
 
-            // impelmenet exception
+            // implement exception
             return null;
         }
 
-        public async Task<Envelope> SendSignatureRequestAsync(string templateId, string recipientName, string recipientEmail, string templateRole)
+        public async Task<Envelope> SendDocumentSignatureRequestAsync(string documentName, string recipientName, string recipientEmail, string contentType, FileStream fileStream)
+        {
+            var url = _baseUrl + "/envelopes";
+
+            var xmlBody =
+                "<envelopeDefinition xmlns=\"http://www.docusign.com/restapi\">" +
+                "<emailSubject>DocuSign API - Signature Request on Document</emailSubject>" +
+                "<status>sent</status>" + 	// "sent" to send immediately, "created" to save as draft in your account
+                // add document(s)
+                "<documents>" +
+                    "<document>" +
+                        "<documentId>1</documentId>" +
+                        "<name>" + documentName + "</name>" +
+                    "</document>" +
+                "</documents>" +
+                // add recipient(s)
+                "<recipients>" +
+                    "<signers>" +
+                        "<signer>" +
+                            "<recipientId>1</recipientId>" +
+                            "<email>" + recipientEmail + "</email>" +
+                            "<name>" + recipientName + "</name>" +
+                            "<tabs>" +
+                                "<signHereTabs>" +
+                                    "<signHere>" +
+                                        "<xPosition>100</xPosition>" + // default unit is pixels
+                                        "<yPosition>100</yPosition>" + // default unit is pixels
+                                        "<documentId>1</documentId>" +
+                                        "<pageNumber>1</pageNumber>" +
+                                    "</signHere>" +
+                                "</signHereTabs>" +
+                            "</tabs>" +
+                        "</signer>" +
+                    "</signers>" +
+                "</recipients>" +
+                "</envelopeDefinition>";
+
+            using (var content = new MultipartFormDataContent("BOUNDARY"))
+            {
+                content.Add(new StringContent(xmlBody, Encoding.UTF8, "application/xml"));
+                content.Add(new StreamContent(fileStream), "test", documentName);
+
+                var request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Post,
+                    RequestUri = new Uri(url),
+                    Content = content
+                };
+
+                var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
+                var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    var envelope = JsonConvert.DeserializeObject<Envelope>(response);
+                    return envelope;
+                }
+            }
+
+            // implement exception
+            return null;
+        }
+
+        public async Task<Envelope> SendSignatureRequestTemplateAsync(string templateId, string recipientName, string recipientEmail, string templateRole)
         {
             var url = _baseUrl + "/envelopes";
 
@@ -116,7 +178,7 @@ namespace DocuSign
                 return envelope;
             }
 
-            // impelmenet exception
+            // implement exception
             return null;
         }
 
@@ -150,7 +212,7 @@ namespace DocuSign
                 return envelope;
             }
 
-            // impelmenet exception
+            // implement exception
             return null;
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -16,32 +17,30 @@ namespace DocuSign.FunctionalTests
     [TestFixture]
     public class Tests
     {
-        private string username;
-        private string password;
-        private string integratorKey;
-        private string templateId;
-        private string templateRole;
-        private string recipientName;
-        private string recipientEmail;
-
-        private HttpClient _httpClient;
+        private string _username;
+        private string _password;
+        private string _integratorKey;
+        private string _templateId;
+        private string _templateRole;
+        private string _recipientName;
+        private string _recipientEmail;
 
         [TestFixtureSetUp]
         public void Init()
         {
-            username = "7c388de0-24b9-4c43-a0a1-2d2614c5e54c";		        // your account email
-            password = "iQC}LGq7O^eNXk5U";		                            // your account password
-            integratorKey = "NAXX-26a52107-ef86-4a50-9e71-4a0396ba1c49";    // your account Integrator Key (found on Preferences -> API page)
-            templateId = "29CB97E5-DCE1-4C14-91A8-A8317BCD29AD";            // valid templateId from a template in your account
-            templateRole = "Signing Role";		                            // template role that exists on above template
-            recipientName = "Wade Wegner";		                            // recipient (signer) name
-            recipientEmail = "wade.wegner@gmail.com";		                // recipient (signer) email
+            _username = "7c388de0-24b9-4c43-a0a1-2d2614c5e54c";             // your account email
+            _password = "iQC}LGq7O^eNXk5U";                                 // your account password
+            _integratorKey = "NAXX-26a52107-ef86-4a50-9e71-4a0396ba1c49";   // your account Integrator Key (found on Preferences -> API page)
+            _templateId = "29CB97E5-DCE1-4C14-91A8-A8317BCD29AD";           // valid templateId from a template in your account
+            _templateRole = "Signing Role";		                            // template role that exists on above template
+            _recipientName = "Wade Wegner";		                            // recipient (signer) name
+            _recipientEmail = "wade.wegner@gmail.com";		                // recipient (signer) email
         }
 
         [Test]
         public async void LoginIsNotNull()
         {
-            var auth = new AuthenticationClient(username, password, integratorKey);
+            var auth = new AuthenticationClient(_username, _password, _integratorKey);
             var loginInformation = await auth.LoginInformationAsync();
            
             Assert.IsNotNull(loginInformation);
@@ -58,11 +57,11 @@ namespace DocuSign.FunctionalTests
         [Test]
         public async void GetEnvelopeInformation()
         {
-            var auth = new AuthenticationClient(username, password, integratorKey);
+            var auth = new AuthenticationClient(_username, _password, _integratorKey);
             await auth.LoginInformationAsync();
 
             var client = new DocuSignClient(auth);
-            var envelope = await client.SendSignatureRequestAsync(templateId, recipientName, recipientEmail, templateRole);
+            var envelope = await client.SendSignatureRequestAsync(_templateId, _recipientName, _recipientEmail, _templateRole);
 
             var envelopeDetails = await client.GetEnvelopeInformationAsync(envelope.envelopeId);
 
@@ -90,12 +89,12 @@ namespace DocuSign.FunctionalTests
         [Test]
         public async void GetEnvelopeRecipientInformation()
         {
-            var auth = new AuthenticationClient(username, password, integratorKey);
+            var auth = new AuthenticationClient(_username, _password, _integratorKey);
             await auth.LoginInformationAsync();
 
             var client = new DocuSignClient(auth);
 
-            var envelope = await client.SendSignatureRequestAsync(templateId, recipientName, recipientEmail, templateRole);
+            var envelope = await client.SendSignatureRequestAsync(_templateId, _recipientName, _recipientEmail, _templateRole);
             var recipient = await client.GetEnvelopeRecipientInformationAsync(envelope.envelopeId);
 
             Assert.IsNotNull(recipient);
@@ -119,22 +118,30 @@ namespace DocuSign.FunctionalTests
         [Test]
         public async void SendSignatureRequestFromDocument()
         {
-            var auth = new AuthenticationClient(username, password, integratorKey);
+            var auth = new AuthenticationClient(_username, _password, _integratorKey);
             await auth.LoginInformationAsync();
 
             var client = new DocuSignClient(auth);
-           
 
+            var documentName = "test.pdf";
+            var fileStream = File.OpenRead(documentName);
+            var envelope = await client.SendDocumentSignatureRequestAsync(documentName, _recipientName, _recipientEmail, "application/pdf", fileStream);
+
+            Assert.IsNotNull(envelope);
+            Assert.IsNotNull(envelope.envelopeId);
+            Assert.IsNotNull(envelope.status);
+            Assert.IsNotNull(envelope.statusDateTime);
+            Assert.IsNotNull(envelope.uri);
         }
 
         [Test]
         public async void SendSignatureRequestFromTemplate()
         {
-            var auth = new AuthenticationClient(username, password, integratorKey);
+            var auth = new AuthenticationClient(_username, _password, _integratorKey);
             await auth.LoginInformationAsync();
 
             var client = new DocuSignClient(auth);
-            var envelope = await client.SendSignatureRequestAsync(templateId, recipientName, recipientEmail, templateRole);
+            var envelope = await client.SendSignatureRequestAsync(_templateId, _recipientName, _recipientEmail, _templateRole);
 
             Assert.IsNotNull(envelope);
             Assert.IsNotNull(envelope.envelopeId);
@@ -146,14 +153,14 @@ namespace DocuSign.FunctionalTests
         [Test]
         public async void GetRecipientViewUrl()
         {
-            var auth = new AuthenticationClient(username, password, integratorKey);
+            var auth = new AuthenticationClient(_username, _password, _integratorKey);
             await auth.LoginInformationAsync();
 
             var client = new DocuSignClient(auth);
-            var envelope = await client.SendSignatureRequestAsync(templateId, recipientName, recipientEmail, templateRole);
+            var envelope = await client.SendSignatureRequestAsync(_templateId, _recipientName, _recipientEmail, _templateRole);
 
             var uri = envelope.uri;
-            var recipientView = await client.RecipientViewAsync(recipientName, recipientEmail, uri);
+            var recipientView = await client.RecipientViewAsync(_recipientName, _recipientEmail, uri);
 
             Assert.IsNotNull(recipientView);
             Assert.IsNotNull(recipientView.url);
