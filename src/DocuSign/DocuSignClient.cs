@@ -17,18 +17,18 @@ namespace DocuSign
         private string _docuSignCredentials;
         private HttpClient _httpClient;
 
-        public DocuSignClient(string baseUrl, string docuSignCredentials)
-            : this (baseUrl, docuSignCredentials, new HttpClient())
+        public DocuSignClient(AuthenticationClient authenticationClient)
+            : this (authenticationClient, new HttpClient())
         {
         }
 
-        public DocuSignClient(string baseUrl, string docuSignCredentials, HttpClient httpClient)
+        public DocuSignClient(AuthenticationClient authenticationClient, HttpClient httpClient)
         {
-            _baseUrl = baseUrl;
-            _docuSignCredentials = docuSignCredentials;
+            _baseUrl = authenticationClient.BaseUrl;
+            _docuSignCredentials = authenticationClient.DocuSignCredentials;
             _httpClient = httpClient;
 
-            _httpClient.DefaultRequestHeaders.Add("X-DocuSign-Authentication", docuSignCredentials);
+            _httpClient.DefaultRequestHeaders.Add("X-DocuSign-Authentication", authenticationClient.DocuSignCredentials);
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }

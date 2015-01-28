@@ -60,7 +60,7 @@ namespace DocuSign.FunctionalTests
             var auth = new AuthenticationClient(username, password, integratorKey);
             await auth.LoginInformation();
 
-            var client = new DocuSignClient(auth.BaseUrl, auth.DocuSignCredentials);
+            var client = new DocuSignClient(auth);
             var envelope = await client.SendSignatureRequestAsync(templateId, recipientName, recipientEmail, templateRole);
 
             Assert.IsNotNull(envelope);
