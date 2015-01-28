@@ -88,6 +88,35 @@ namespace DocuSign.FunctionalTests
         }
 
         [Test]
+        public async void GetEnvelopeRecipientInformation()
+        {
+            var auth = new AuthenticationClient(username, password, integratorKey);
+            await auth.LoginInformationAsync();
+
+            var client = new DocuSignClient(auth);
+
+            var envelope = await client.SendSignatureRequestAsync(templateId, recipientName, recipientEmail, templateRole);
+            var recipient = await client.GetEnvelopeRecipientInformationAsync(envelope.envelopeId);
+
+            Assert.IsNotNull(recipient);
+            Assert.IsNotNull(recipient.signers);
+            Assert.IsNotNull(recipient.recipientCount);
+            Assert.IsNotNull(recipient.currentRoutingOrder);
+            Assert.IsNotNull(recipient.signers[0].name);
+            Assert.IsNotNull(recipient.signers[0].email);
+            Assert.IsNotNull(recipient.signers[0].recipientId);
+            Assert.IsNotNull(recipient.signers[0].recipientIdGuid);
+            Assert.IsNotNull(recipient.signers[0].requireIdLookup);
+            Assert.IsNotNull(recipient.signers[0].userId);
+            Assert.IsNotNull(recipient.signers[0].clientUserId);
+            Assert.IsNotNull(recipient.signers[0].routingOrder);
+            Assert.IsNotNull(recipient.signers[0].note);
+            Assert.IsNotNull(recipient.signers[0].status);
+            Assert.IsNotNull(recipient.signers[0].templateLocked);
+            Assert.IsNotNull(recipient.signers[0].templateRequired);
+        }
+
+        [Test]
         public async void SendSignatureRequest()
         {
             var auth = new AuthenticationClient(username, password, integratorKey);

@@ -42,7 +42,9 @@
     <Compile Include="DocuSignClient.cs" />
     <Compile Include="Models\Envelope.cs" />
     <Compile Include="Models\LoginAccount.cs" />
+    <Compile Include="Models\Recipient.cs" />
     <Compile Include="Models\RecipientView.cs" />
+    <Compile Include="Models\Signer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
