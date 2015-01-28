@@ -56,6 +56,38 @@ namespace DocuSign.FunctionalTests
         }
 
         [Test]
+        public async void GetEnvelopeInformation()
+        {
+            var auth = new AuthenticationClient(username, password, integratorKey);
+            await auth.LoginInformationAsync();
+
+            var client = new DocuSignClient(auth);
+            var envelope = await client.SendSignatureRequestAsync(templateId, recipientName, recipientEmail, templateRole);
+
+            var envelopeDetails = await client.GetEnvelopeInformationAsync(envelope.envelopeId);
+
+            Assert.IsNotNull(envelopeDetails);
+            Assert.IsNotNull(envelopeDetails.envelopeId);
+            Assert.IsNotNull(envelopeDetails.status);
+            Assert.IsNotNull(envelopeDetails.documentsUri);
+            Assert.IsNotNull(envelopeDetails.recipientsUri);
+            Assert.IsNotNull(envelopeDetails.envelopeUri);
+            Assert.IsNotNull(envelopeDetails.emailSubject);
+            Assert.IsNotNull(envelopeDetails.customFieldsUri);
+            Assert.IsNotNull(envelopeDetails.notificationUri);
+            Assert.IsNotNull(envelopeDetails.enableWetSign);
+            Assert.IsNotNull(envelopeDetails.allowReassign);
+            Assert.IsNotNull(envelopeDetails.createdDateTime);
+            Assert.IsNotNull(envelopeDetails.lastModifiedDateTime);
+            Assert.IsNotNull(envelopeDetails.sentDateTime);
+            Assert.IsNotNull(envelopeDetails.statusChangedDateTime);
+            Assert.IsNotNull(envelopeDetails.documentsCombinedUri);
+            Assert.IsNotNull(envelopeDetails.certificateUri);
+            Assert.IsNotNull(envelopeDetails.templatesUri);
+            Assert.IsNotNull(envelopeDetails.purgeState);
+        }
+
+        [Test]
         public async void SendSignatureRequest()
         {
             var auth = new AuthenticationClient(username, password, integratorKey);

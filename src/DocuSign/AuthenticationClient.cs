@@ -47,7 +47,7 @@ namespace DocuSign
 
             return docuSignCredentials;
         }
-
+        
         public async Task<LoginAccount> LoginInformationAsync()
         {
             var request = new HttpRequestMessage
