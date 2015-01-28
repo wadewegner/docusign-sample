@@ -41,7 +41,8 @@ namespace DocuSign.FunctionalTests
         [Test]
         public async void LoginIsNotNull()
         {
-            var loginInformation = await Login();
+            var auth = new AuthenticationClient(username, password, integratorKey);
+            var loginInformation = await auth.LoginInformationAsync();
            
             Assert.IsNotNull(loginInformation);
             Assert.IsNotNull(loginInformation.accountId);
@@ -58,7 +59,7 @@ namespace DocuSign.FunctionalTests
         public async void SendSignatureRequest()
         {
             var auth = new AuthenticationClient(username, password, integratorKey);
-            await auth.LoginInformation();
+            await auth.LoginInformationAsync();
 
             var client = new DocuSignClient(auth);
             var envelope = await client.SendSignatureRequestAsync(templateId, recipientName, recipientEmail, templateRole);
@@ -74,7 +75,7 @@ namespace DocuSign.FunctionalTests
         public async void GetRecipientViewUrl()
         {
             var auth = new AuthenticationClient(username, password, integratorKey);
-            await auth.LoginInformation();
+            await auth.LoginInformationAsync();
 
             var client = new DocuSignClient(auth);
             var envelope = await client.SendSignatureRequestAsync(templateId, recipientName, recipientEmail, templateRole);
@@ -89,13 +90,5 @@ namespace DocuSign.FunctionalTests
             bool isUri = Uri.TryCreate(recipientView.url, UriKind.Absolute, out uriResult);
             Assert.IsTrue(isUri);
         }
-
-        private async Task<LoginAccount> Login()
-        {
-            var auth = new AuthenticationClient(username, password, integratorKey);
-            var loginInformation = await auth.LoginInformation();
-            return loginInformation;
-        }
-
     }
 }
