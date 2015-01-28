@@ -117,7 +117,18 @@ namespace DocuSign.FunctionalTests
         }
 
         [Test]
-        public async void SendSignatureRequest()
+        public async void SendSignatureRequestFromDocument()
+        {
+            var auth = new AuthenticationClient(username, password, integratorKey);
+            await auth.LoginInformationAsync();
+
+            var client = new DocuSignClient(auth);
+           
+
+        }
+
+        [Test]
+        public async void SendSignatureRequestFromTemplate()
         {
             var auth = new AuthenticationClient(username, password, integratorKey);
             await auth.LoginInformationAsync();

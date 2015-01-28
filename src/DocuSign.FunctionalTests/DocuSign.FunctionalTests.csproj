@@ -73,7 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DocuSign\DocuSign.csproj">
-      <Project>{1d2ffe32-6d72-4a12-a2ce-717ba29024bd}</Project>
+      <Project>{6a567d77-0559-41f7-a889-f6fcc07feb35}</Project>
       <Name>DocuSign</Name>
     </ProjectReference>
   </ItemGroup>
