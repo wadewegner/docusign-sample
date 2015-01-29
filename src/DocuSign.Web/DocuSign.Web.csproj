@@ -113,7 +113,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -148,13 +147,19 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="Controllers\SignatureController.cs" />
+    <Compile Include="Controllers\EnvelopeController.cs" />
+    <Compile Include="Controllers\RecipientController.cs" />
+    <Compile Include="Controllers\SignatureDocumentController.cs" />
+    <Compile Include="Controllers\SignatureTemplateController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Models\SignatureRequestDocument.cs" />
+    <Compile Include="Models\SignatureRequestTemplate.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\DocuSignController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
