@@ -29,7 +29,6 @@ namespace DocuSign.FunctionalTests
         public void Init()
         {
             _username = "7c388de0-24b9-4c43-a0a1-2d2614c5e54c";             // your account email
-            _password = "iQC}LGq7O^eNXk5U";                                 // your account password
             _integratorKey = "NAXX-26a52107-ef86-4a50-9e71-4a0396ba1c49";   // your account Integrator Key (found on Preferences -> API page)
             _templateId = "29CB97E5-DCE1-4C14-91A8-A8317BCD29AD";           // valid templateId from a template in your account
             _templateRole = "Signing Role";		                            // template role that exists on above template

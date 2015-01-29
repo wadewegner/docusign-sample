@@ -23,11 +23,21 @@ namespace DocuSign
         }
 
         public DocuSignClient(AuthenticationClient authenticationClient, HttpClient httpClient)
+            : this (authenticationClient.BaseUrl, authenticationClient.DocuSignCredentials, httpClient)
         {
-            _baseUrl = authenticationClient.BaseUrl;
+        }
+
+        public DocuSignClient(string baseUrl, string docuSignCredentials)
+            : this (baseUrl, docuSignCredentials, new HttpClient())
+        {
+        }
+
+        public DocuSignClient(string baseUrl, string docuSignCredentials, HttpClient httpClient)
+        {
+            _baseUrl = baseUrl;
             _httpClient = httpClient;
 
-            _httpClient.DefaultRequestHeaders.Add("X-DocuSign-Authentication", authenticationClient.DocuSignCredentials);
+            _httpClient.DefaultRequestHeaders.Add("X-DocuSign-Authentication", docuSignCredentials);
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
@@ -141,7 +151,7 @@ namespace DocuSign
             return null;
         }
 
-        public async Task<Envelope> SendSignatureRequestTemplateAsync(string templateId, string recipientName, string recipientEmail, string templateRole)
+        public async Task<Envelope> SendSignatureRequestAsync(string templateId, string recipientName, string recipientEmail, string templateRole)
         {
             var url = _baseUrl + "/envelopes";
 
