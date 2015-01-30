@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="AuthenticationClient.cs" />
     <Compile Include="DocuSignClient.cs" />
+    <Compile Include="Models\Envelopes.cs" />
     <Compile Include="Models\EnvelopeTemplate.cs" />
     <Compile Include="Models\Envelope.cs" />
     <Compile Include="Models\LoginAccount.cs" />

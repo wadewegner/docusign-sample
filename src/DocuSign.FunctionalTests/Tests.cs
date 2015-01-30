@@ -67,6 +67,18 @@ namespace DocuSign.FunctionalTests
         }
 
         [Test]
+        public async void GetEnvelopes()
+        {
+            var auth = new AuthenticationClient(_username, _password, _integratorKey);
+            await auth.LoginInformationAsync();
+
+            var client = new DocuSignClient(auth);
+            var envelopes = await client.GetEnvelopesAsync(DateTime.Now.AddDays(-100));
+
+            Assert.IsNotNull(envelopes);
+        }
+
+        [Test]
         public async void GetEnvelopeInformation()
         {
             var auth = new AuthenticationClient(_username, _password, _integratorKey);

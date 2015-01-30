@@ -80,10 +80,32 @@
         <siena:property name="email" type="string" />
         <siena:property name="userId" type="string" />
       </siena:object>
+      <siena:object name="GetEnvelopes_Root">
+        <siena:property name="resultSetSize" type="string" />
+        <siena:property name="totalSetSize" type="string" />
+        <siena:property name="startPosition" type="string" />
+        <siena:property name="endPosition" type="string" />
+        <siena:property name="nextUri" type="string" />
+        <siena:property name="previousUri" type="string" />
+        <siena:property name="envelopes" typeRef="GetEnvelopes_envelopes_Array" />
+      </siena:object>
+      <siena:object name="GetEnvelopes_envelopes_Object">
+        <siena:property name="envelopeId" type="string" />
+        <siena:property name="status" type="string" />
+        <siena:property name="documentsUri" type="string" />
+        <siena:property name="recipientsUri" type="string" />
+        <siena:property name="envelopeUri" type="string" />
+        <siena:property name="customFieldsUri" type="string" />
+        <siena:property name="notificationUri" type="string" />
+        <siena:property name="statusChangedDateTime" type="string" />
+        <siena:property name="documentsCombinedUri" type="string" />
+        <siena:property name="certificateUri" type="string" />
+        <siena:property name="templatesUri" type="string" />
+      </siena:object>
+      <siena:array name="GetEnvelopes_envelopes_Array" typeRef="GetEnvelopes_envelopes_Object" />
       <siena:array name="GetTemplates_envelopeTemplates_Array" typeRef="GetTemplates_envelopeTemplates_Object" />
       <siena:array name="GetRecipient_signers_Array" typeRef="GetRecipient_signers_Object" />
       <siena:array name="StringArray" type="string" />
-    
     </siena:jsonTypes>
   </grammars>
   <siena:authenticationProviders />
@@ -101,8 +123,18 @@
         </response>
       </method>
     </resource>
-  </resources>
-  <resources base="http://rgendpointsproxysite.azurewebsites.net">
+    <resource path="DocuSign/api/envelopes/">
+      <method name="Get" id="GetEnvelopes" siena:requiresAuthentication="false">
+        <request>
+          <param name="fromDate" style="Query" required="true" siena:sampleDefault="01/01/2015" />
+        </request>
+        <response siena:resultForm="single">
+          <representation mediaType="application/json">
+            <param name="GetEnvelopes_Name" type="sienatool:GetEnvelopes_Root" style="Plain" path="" />
+          </representation>
+        </response>
+      </method>
+    </resource>  
     <resource path="DocuSign/api/recipient/">
       <method name="Get" id="GetRecipient" siena:requiresAuthentication="false">
         <request>

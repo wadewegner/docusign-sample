@@ -42,6 +42,44 @@ namespace DocuSign
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
+        public async Task<Envelopes> GetEnvelopesAsync(DateTime fromDate)
+        {
+            var currMonth = fromDate.Month;
+            var currDay = fromDate.Day;
+            var currYear = fromDate.Year;
+
+            if (currMonth != 1)
+            {
+                currMonth -= 1;
+            }
+            else
+            {   
+                // special case for january
+                currMonth = 12;
+                currYear -= 1;
+            }
+
+            var url = _baseUrl + "/envelopes?from_date=" + currMonth + "%2F" + currDay + "%2F" + currYear;
+
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(url)
+            };
+
+            var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                var envelopes = JsonConvert.DeserializeObject<Envelopes>(response);
+                return envelopes;
+            }
+
+            // implement exception
+            return null;
+        }
+
         public async Task<Templates> GetTemplatesAsync()
         {
             var url = _baseUrl + "/templates";
@@ -57,7 +95,6 @@ namespace DocuSign
 
             if (responseMessage.IsSuccessStatusCode)
             {
-                var jObject = JObject.Parse(response);
                 var envelope = JsonConvert.DeserializeObject<Templates>(response);
                 return envelope;
             }
