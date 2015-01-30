@@ -1,1 +1,3 @@
-nupkg.exe "C:\Projects\Github\WadeWegner\docusign-sample\src\DocuSign.Web"
+source params
+
+nupkg.exe "$projectPath"
