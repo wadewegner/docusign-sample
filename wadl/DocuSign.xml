@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-16"?>
+<application xmlns:siena="http://schemas.microsoft.com/MicrosoftProjectSiena/WADL/2014/11" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sienatool="http://www.todo.com" siena:serviceId="DocuSign" xmlns="http://wadl.dev.java.net/2009/02">
+  <grammars>
+    <siena:jsonTypes targetNamespace="http://www.todo.com" xmlns:wadl="http://wadl.dev.java.net/2009/02">
+      <siena:object name="GetEnvelope_Root">
+        <siena:property name="envelopeId" type="string" />
+        <siena:property name="status" type="string" />
+        <siena:property name="documentsUri" type="string" />
+        <siena:property name="recipientsUri" type="string" />
+        <siena:property name="envelopeUri" type="string" />
+        <siena:property name="emailSubject" type="string" />
+        <siena:property name="customFieldsUri" type="string" />
+        <siena:property name="notificationUri" type="string" />
+        <siena:property name="enableWetSign" type="string" />
+        <siena:property name="createdDateTime" type="string" />
+        <siena:property name="lastModifiedDateTime" type="string" />
+        <siena:property name="sentDateTime" type="string" />
+        <siena:property name="statusChangedDateTime" type="string" />
+        <siena:property name="documentsCombinedUri" type="string" />
+        <siena:property name="certificateUri" type="string" />
+        <siena:property name="templatesUri" type="string" />
+        <siena:property name="purgeState" type="string" />
+      </siena:object>
+    </siena:jsonTypes>
+    <siena:jsonTypes targetNamespace="http://www.todo.com" xmlns:wadl="http://wadl.dev.java.net/2009/02">
+      <siena:object name="GetRecipient_Root">
+        <siena:property name="signers" typeRef="GetRecipient_signers_Array" />
+        <siena:property name="agents" typeRef="StringArray" />
+        <siena:property name="editors" typeRef="StringArray" />
+        <siena:property name="intermediaries" typeRef="StringArray" />
+        <siena:property name="carbonCopies" typeRef="StringArray" />
+        <siena:property name="certifiedDeliveries" typeRef="StringArray" />
+        <siena:property name="inPersonSigners" typeRef="StringArray" />
+        <siena:property name="recipientCount" type="string" />
+        <siena:property name="currentRoutingOrder" type="string" />
+      </siena:object>
+      <siena:object name="GetRecipient_signers_Object">
+        <siena:property name="name" type="string" />
+        <siena:property name="email" type="string" />
+        <siena:property name="recipientId" type="string" />
+        <siena:property name="recipientIdGuid" type="string" />
+        <siena:property name="requireIdLookup" type="string" />
+        <siena:property name="userId" type="string" />
+        <siena:property name="clientUserId" type="string" />
+        <siena:property name="routingOrder" type="string" />
+        <siena:property name="note" type="string" />
+        <siena:property name="status" type="string" />
+        <siena:property name="templateLocked" type="string" />
+        <siena:property name="templateRequired" type="string" />
+      </siena:object>
+      <siena:array name="GetRecipient_signers_Array" typeRef="GetRecipient_signers_Object" />
+      <siena:array name="StringArray" type="string" />
+    </siena:jsonTypes>
+  </grammars>
+  <siena:authenticationProviders />
+  <siena:template />
+  <resources base="http://rgendpointsproxysite.azurewebsites.net">
+    <resource path="DocuSign/api/envelope/">
+      <method name="Get" id="GetEnvelope" siena:requiresAuthentication="false">
+        <request>
+          <param name="id" style="Query" required="true" siena:sampleDefault="f3f29c62-6e11-43ad-a8ab-686dbdd2a96d" />
+        </request>
+        <response siena:resultForm="single">
+          <representation mediaType="application/json">
+            <param name="GetEnvelope_Name" type="sienatool:GetEnvelope_Root" style="Plain" path="" />
+          </representation>
+        </response>
+      </method>
+    </resource>
+  </resources>
+  <resources base="http://rgendpointsproxysite.azurewebsites.net">
+    <resource path="DocuSign/api/recipient/">
+      <method name="Get" id="GetRecipient" siena:requiresAuthentication="false">
+        <request>
+          <param name="id" style="Query" required="true" siena:sampleDefault="011808fc-7244-4150-b8ca-7896dc76d819" />
+        </request>
+        <response siena:resultForm="single">
+          <representation mediaType="application/json">
+            <param name="GetRecipient_Name" type="sienatool:GetRecipient_Root" style="Plain" path="" />
+          </representation>
+        </response>
+      </method>
+    </resource>
+    <resource path="DocuSign/api/signaturetemplate">
+      <method name="POST" id="SignatureTemplate" siena:requiresAuthentication="false">
+        <doc title="Send a signature request for our template" />
+        <request>
+          <representation mediaType="application/json">
+            <param style="plain" name="TemplateId" path="/templateId" type="xs:string" required="true" siena:sampleDefault="29CB97E5-DCE1-4C14-91A8-A8317BCD29AD"/>
+            <param style="plain" name="RecipientName" path="/recipientName" type="xs:string" required="true" siena:sampleDefault="Wade Wegner"/>
+            <param style="plain" name="RecipientEmail" path="/recipientEmail" type="xs:string" required="true" siena:sampleDefault="wade.wegner@gmail.com"/>
+            <param style="plain" name="TemplateRole" path="/templateRole" type="xs:string" required="true" siena:sampleDefault="Signing Role"/>
+          </representation>
+        </request>
+        <response siena:resultForm="single">
+          <representation mediaType="application/json">
+            <param name="GetEnvelope_Name" type="sienatool:GetEnvelope_Root" style="Plain" path="" />
+          </representation>
+        </response>
+      </method>
+    </resource>
+  </resources>
+</application>

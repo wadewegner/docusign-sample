@@ -27,8 +27,17 @@ namespace DocuSign.Web.Controllers
             await CheckAuthInfo();
 
             var client = new DocuSignClient(BaseUrl, DocuSignCredentials);
+            string root;
 
-            var root = HttpContext.Current.Server.MapPath("~/App_Data");
+            if (IsLocal(Request))
+            {
+                root = HttpContext.Current.Server.MapPath("~/App_Data");    
+            }
+            {
+                root = @"D:\home\site\wwwroot";
+            }
+
+            
             var streamProvider = new MultipartFormDataStreamProvider(root);
 
             await Request.Content.ReadAsMultipartAsync(streamProvider);
@@ -61,6 +70,12 @@ namespace DocuSign.Web.Controllers
             var envelope = await client.SendDocumentSignatureRequestAsync(documentName, recipientName, recipientEmail, contentType, fileStream);
       
             return envelope;
+        }
+
+        public static bool IsLocal(HttpRequestMessage request)
+        {
+            var localFlag = request.Properties["MS_IsLocal"] as Lazy<bool>;
+            return localFlag != null && localFlag.Value;
         }
     }
 }
