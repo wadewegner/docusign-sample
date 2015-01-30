@@ -1,6 +1,6 @@
 ﻿{
     "id": "DocuSign",
-    "version": "0.0.11",
+    "version": "0.0.12",
     "authors": "Wade Wegner",
     "description": "DocuSign services and website upload tool",
     "name": "DocuSign",
@@ -8,6 +8,7 @@
         "apiDefinition": "/swagger/api-docs/Envelope",
         "apiDefinition": "/swagger/api-docs/Recipient",
         "apiDefinition": "/swagger/api-docs/SignatureDocument",
-        "apiDefinition": "/swagger/api-docs/SignatureTemplate"
+        "apiDefinition": "/swagger/api-docs/SignatureTemplate",
+        "apiDefinition": "/swagger/api-docs/Templates"
     }
 }

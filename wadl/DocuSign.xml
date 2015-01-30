@@ -48,8 +48,42 @@
         <siena:property name="templateLocked" type="string" />
         <siena:property name="templateRequired" type="string" />
       </siena:object>
+      <siena:object name="GetTemplates_Root">
+        <siena:property name="envelopeTemplates" typeRef="GetTemplates_envelopeTemplates_Array" />
+        <siena:property name="resultSetSize" type="string" />
+        <siena:property name="startPosition" type="string" />
+        <siena:property name="endPosition" type="string" />
+        <siena:property name="totalSetSize" type="string" />
+      </siena:object>
+      <siena:object name="GetTemplates_envelopeTemplates_Object">
+        <siena:property name="templateId" type="string" />
+        <siena:property name="name" type="string" />
+        <siena:property name="shared" type="string" />
+        <siena:property name="password" type="string" />
+        <siena:property name="description" type="string" />
+        <siena:property name="lastModified" type="string" />
+        <siena:property name="pageCount" type="number" />
+        <siena:property name="uri" type="string" />
+        <siena:property name="folderName" type="string" />
+        <siena:property name="folderId" type="string" />
+        <siena:property name="folderUri" type="string" />
+        <siena:property name="owner" typeRef="GetTemplates_owner_Object" />
+        <siena:property name="emailSubject" type="string" />
+        <siena:property name="emailBlurb" type="string" />
+        <siena:property name="signingLocation" type="string" />
+        <siena:property name="authoritativeCopy" type="string" />
+        <siena:property name="enableWetSign" type="string" />
+        <siena:property name="allowMarkup" type="string" />
+      </siena:object>
+      <siena:object name="GetTemplates_owner_Object">
+        <siena:property name="userName" type="string" />
+        <siena:property name="email" type="string" />
+        <siena:property name="userId" type="string" />
+      </siena:object>
+      <siena:array name="GetTemplates_envelopeTemplates_Array" typeRef="GetTemplates_envelopeTemplates_Object" />
       <siena:array name="GetRecipient_signers_Array" typeRef="GetRecipient_signers_Object" />
       <siena:array name="StringArray" type="string" />
+    
     </siena:jsonTypes>
   </grammars>
   <siena:authenticationProviders />
@@ -77,6 +111,16 @@
         <response siena:resultForm="single">
           <representation mediaType="application/json">
             <param name="GetRecipient_Name" type="sienatool:GetRecipient_Root" style="Plain" path="" />
+          </representation>
+        </response>
+      </method>
+    </resource>
+    <resource path="DocuSign/api/templates">
+      <method name="Get" id="GetTemplates" siena:requiresAuthentication="false">
+        <request />
+        <response siena:resultForm="single">
+          <representation mediaType="application/json">
+            <param name="GetTemplates_Name" type="sienatool:GetTemplates_Root" style="Plain" path="" />
           </representation>
         </response>
       </method>

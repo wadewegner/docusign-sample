@@ -160,7 +160,7 @@
     <Compile Include="Controllers\SignatureDocumentController.cs" />
     <Compile Include="Controllers\SignatureTemplateController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Controllers\TemplatesController.cs" />
     <Compile Include="Models\SignatureRequestDocument.cs" />
     <Compile Include="Models\SignatureRequestTemplate.cs" />
     <Compile Include="Global.asax.cs">

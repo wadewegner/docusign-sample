@@ -42,6 +42,30 @@ namespace DocuSign
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
+        public async Task<Templates> GetTemplatesAsync()
+        {
+            var url = _baseUrl + "/templates";
+
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(url)
+            };
+
+            var responseMessage = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                var jObject = JObject.Parse(response);
+                var envelope = JsonConvert.DeserializeObject<Templates>(response);
+                return envelope;
+            }
+
+            // implement exception
+            return null;
+        }
+
         public async Task<Envelope> GetEnvelopeInformationAsync(string envelopeId)
         {
             var url = _baseUrl + "/envelopes/" + envelopeId;
