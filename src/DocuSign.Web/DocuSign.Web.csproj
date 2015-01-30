@@ -154,7 +154,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Models\SignatureRequestDocument.cs" />
     <Compile Include="Models\SignatureRequestTemplate.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
