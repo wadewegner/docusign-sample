@@ -1,6 +1,6 @@
 ﻿{
     "id": "DocuSign",
-    "version": "0.0.13",
+    "version": "0.0.14",
     "authors": "Wade Wegner",
     "description": "DocuSign services and website upload tool",
     "name": "DocuSign",

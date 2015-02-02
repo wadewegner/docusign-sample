@@ -226,7 +226,7 @@ namespace DocuSign
                                 "<name>" + recipientName + "</name>" +
                                 "<email>" + recipientEmail + "</email>" +
                                 "<roleName>" + templateRole + "</roleName>" +
-                                "<clientUserId>1</clientUserId>" +      // is this always needed? TODO: What do I do with this?
+                                //"<clientUserId>1</clientUserId>" +      // is this always needed? TODO: What do I do with this?
                             "</templateRole>" +
                         "</templateRoles>" +
                     "</envelopeDefinition>";
